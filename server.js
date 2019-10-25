@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./database/connectDB');
+const db = require('./model/connectDB');
+const bodyParser = require('body-parser');
 const app = express();
 let port = process.env.PORT || 7555;
 
-// test dv connection
 db.connect();
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 app.use(cors());
 const server = app.listen(port,()=>{
     console.log("Server running on http://localhost:" + port);
