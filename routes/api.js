@@ -21,7 +21,7 @@ router.post("/Register", (req,res)=>{
                         password: hash
                     })
 
-                    user.save((err, registeredUser) =>{
+                    newUser.save((err, registeredUser) =>{
                         if(err) res.status(400).json({err: err});
                         else{
                             // webToken last for 30 seconds
@@ -44,9 +44,13 @@ router.post("/Login",(req,res)=>{
         email: req.body.email
     })
     .then((user)=>{
+        console.log(req.body);
         if(!user){
             return res.status(401).json({err: "Authentication Not Valid"});
         }else{
+            let password = req.body.password;
+            let userPassword = user.password;
+            console.log(password,userPassword);
             bcrypt.compare(req.body.password,user.password)
             .then(isMatch =>{
                 if(isMatch){
@@ -57,7 +61,8 @@ router.post("/Login",(req,res)=>{
                 }
             })
             .catch((err)=>{
-                res.json({err:err});
+                console.log(err);
+                return res.status(500).json({err:err});
             })
         }
     })
