@@ -13,12 +13,12 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-const server = app.listen(port,()=>{
+app.listen(port,()=>{
     console.log("Server running on http://localhost:" + port);
 })
 
 
-const io = require("socket.io").listen(server);
+/*const io = require("socket.io").listen(server);
 
 io.on("connection", (err,client,next)=>{
     console.log("a user is connected");
@@ -29,7 +29,7 @@ io.on("connection", (err,client,next)=>{
         client.broadcast.emit("user", msg);
         console.log(msg);
     });
-})
+})*/
 
 
 
