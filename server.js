@@ -7,9 +7,9 @@ const app = express();
 let port = process.env.PORT || 7555;
 
 db.connect();
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use(cors());
 app.use((req,res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
