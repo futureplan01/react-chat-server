@@ -47,7 +47,7 @@ router.post("/Login",(req,res)=>{
         email: email
     }).then((user)=>{
         if(!user){
-            return res.status(200).json(err: "Not Valid");
+            return res.status(200).json({err: "Not Valid"});
         }else{
             let token = jwt.sign({subject: user._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
             return res.status(200).json({msg: "Successful", token: token});
