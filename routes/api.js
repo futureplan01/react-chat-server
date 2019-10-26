@@ -6,6 +6,7 @@ const User = require('../model/User');
 
 
 
+
 router.post("/Register", (req,res)=>{
     User.findOne({
         email: req.body.email
