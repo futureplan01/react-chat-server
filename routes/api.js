@@ -44,7 +44,8 @@ router.post("/Register", (req,res)=>{
 router.post("/Login",(req,res)=>{
     User.findOne({
         email: req.body.email
-    }).then((user)=>{
+    })
+    .then((user)=>{
         if(!user){
             return res.status(401).json({err: "Authentication Not Valid"});
         }else{
@@ -61,6 +62,9 @@ router.post("/Login",(req,res)=>{
                 res.json({err:err});
             })
         }
+    })
+    .catch(err =>{
+        console.log(err);
     })
 })
 

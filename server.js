@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use('/',routes);
 
 app.use(cors());
+
 const server = app.listen(port,()=>{
     console.log("Server running on http://localhost:" + port);
 })
@@ -19,7 +20,7 @@ const server = app.listen(port,()=>{
 /*
 const io = require("socket.io").listen(server);
 
-io.on("connection", (client)=>{
+io.on("connection", (err,client,next)=>{
     console.log("a user is connected");
     client.on("disconnect", ()=>{
         console.log("user has disconnected");
