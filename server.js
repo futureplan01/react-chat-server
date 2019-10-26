@@ -20,7 +20,7 @@ const server = app.listen(port,()=>{
 
 const io = require("socket.io").listen(server);
 
-io.on("connection", (err,client,next)=>{
+io.on("connection", (client)=>{
     console.log("a user is connected");
     client.on("disconnect", ()=>{
         console.log("user has disconnected");
