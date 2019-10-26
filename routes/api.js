@@ -37,20 +37,29 @@ router.post("/Register", (req,res)=>{
     })
     .catch ((err) =>{
         console.log(err);
-        res.json ({error: err});
+        res.json ({err: err});
     })
 })
 
 router.post("/Login",(req,res)=>{
-    console.log(req.body);
     User.findOne({
-        email: req.email
+        email: req.body.email
     }).then((user)=>{
         if(!user){
-            return res.status(200).json({err: "Not Valid"});
+            return res.status(401).json({err: "Authentication Not Valid"});
         }else{
-            let token = jwt.sign({subject: user._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
-            return res.status(200).json({msg: "Successful", token: token});
+            bcrypt.compare(req.body.password,user.password)
+            .then(isMatch =>{
+                if(isMatch){
+                    let token = jwt.sign({subject: user._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
+                    return res.status(200).json({msg: "Successful", token: token});     
+                }else{
+                    return res.status(401).json({err: "Authentication Not Valid"});
+                }
+            })
+            .catch((err)=>{
+                res.json({err:err});
+            })
         }
     })
 })
