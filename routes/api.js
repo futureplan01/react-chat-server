@@ -4,9 +4,6 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require('../model/User');
 
-
-
-
 router.post("/Register", (req,res)=>{
     User.findOne({
         email: req.body.email
