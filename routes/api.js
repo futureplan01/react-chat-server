@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const User = require('./model/User');
+const User = require('../model/User');
 
 
 
@@ -42,9 +42,9 @@ router.post("/Register", (req,res)=>{
 })
 
 router.post("/Login",(req,res)=>{
-    let email = req.body.email;
+
     User.findOne({
-        email: email
+        email: req.email
     }).then((user)=>{
         if(!user){
             return res.status(200).json({err: "Not Valid"});
@@ -54,6 +54,8 @@ router.post("/Login",(req,res)=>{
         }
     })
 })
+
+module.exports = router;
 
 
 
