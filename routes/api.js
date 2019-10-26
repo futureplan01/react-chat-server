@@ -42,7 +42,7 @@ router.post("/Register", (req,res)=>{
 })
 
 router.post("/Login",(req,res)=>{
-
+    console.log(req.body);
     User.findOne({
         email: req.email
     }).then((user)=>{
