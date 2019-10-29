@@ -39,6 +39,10 @@ router.post("/Register", (req,res)=>{
     })
 })
 
+//Updates Photos
+router.post('/uploadPictures', (req,res)=>{
+
+})
 router.post("/Login",(req,res)=>{
     User.findOne({
         email: req.body.email
@@ -54,7 +58,8 @@ router.post("/Login",(req,res)=>{
             bcrypt.compare(req.body.password,user.password)
             .then(isMatch =>{
                 if(isMatch){
-                    let token = jwt.sign({subject: user._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
+                    // 1*60 is a minute
+                    let token = jwt.sign({id: user._id, email: user.email}, 'secret',{expiresIn: 1*60});
                     return res.status(200).json({msg: "Successful", token: token});     
                 }else{
                     return res.status(401).json({err: "Authentication Not Valid"});
