@@ -28,9 +28,9 @@ io.on("connection", (client)=>{
     });
 
 })
-server.listen(port,()=>{
-    console.log("Server running on http://localhost:" + port);
-})
+server.listen(port);
+console.log("Server running on http://localhost:" + port);
+
 
 
 
