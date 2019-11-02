@@ -1,6 +1,19 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
+/*const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: (req,file,cb)=>{
+        cb(null, '../public/images/');
+    },
+    filename: function(req,file,cb){
+        cb(null,file.originalname); 
+    }
+})
+const upload = multer ({
+    storage: storage,
+    limits:{fileSize:2000000}  
+});*/
 const jwt = require("jsonwebtoken");
 const User = require('../model/User');
 
@@ -39,9 +52,26 @@ router.post("/Register", (req,res)=>{
     })
 })
 
-//Updates Photos
-router.post('/uploadPictures', (req,res)=>{
 
+//Updates Photos
+router.post('/uploadImage', (req,res)=>{
+    let file = req.file || req.files;
+    if(file){
+       let myImage = req.files.myImage;
+       console.log("My Image", myImage);
+       myImage.mv((__dirname +`/../public/images/${myImage.name}`),(err)=>{
+           console.log("inside mv");
+           if(err){
+               console.log(err);
+            return res.status(404).json({msg: "Upload was not a file"});
+           }
+           else{
+               return res.status(200);
+           }
+       }) 
+    }
+    
+    
 })
 router.post("/Login",(req,res)=>{
     User.findOne({
