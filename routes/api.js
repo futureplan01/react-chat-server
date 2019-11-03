@@ -55,23 +55,25 @@ router.post("/Register", (req,res)=>{
 
 //Updates Photos
 router.post('/uploadImage', (req,res)=>{
-    let file = req.file || req.files;
+    let file = req.files;
+    console.log(file);
     if(file){
        let myImage = req.files.myImage;
        console.log("My Image", myImage);
        myImage.mv((__dirname +`/../public/images/${myImage.name}`),(err)=>{
            console.log("inside mv");
-           if(err){
-               console.log(err);
-            return res.status(404).json({msg: "Upload was not a file"});
+           if(!err){
+               console.log("we good");
+               return res.status(200).json({msg: "Successful"});
            }
            else{
-               return res.status(200);
+               return res.status(404).json({msg: "Upload was not a file"});
            }
        }) 
+    }else{
+        console.log("File not found");
+        return res.status(404).json({msg: "Upload was not a file"});
     }
-    
-    
 })
 router.post("/Login",(req,res)=>{
     User.findOne({
