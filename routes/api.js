@@ -18,32 +18,52 @@ const jwt = require("jsonwebtoken");
 const User = require('../model/User');
 
 router.post("/Register", (req,res)=>{
+    console.log("Inside Register")
     User.findOne({
         email: req.body.email
     }).then((user)=>{
+        console.log("Located if Email Exist");
         // then a user with this email address already exist 
         if(user){
             return res.status(400).json({err: "Email Already Exist"});
         }else{
-            bcrypt.genSalt(10, (err,salt)=>{
-                bcrypt.hash(req.body.password, salt, (err,hash)=>{
-                    if(err) throw err;
-                    let newUser = new User({
-                        username: req.body.name,
-                        email:    req.body.email,
-                        password: hash
-                    })
-
-                    newUser.save((err, registeredUser) =>{
-                        if(err) res.status(400).json({err: err});
-                        else{
-                            // webToken last for 30 seconds
-                            let token = jwt.sign({subject: registeredUser._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
-                            return res.status(200).json({msg: "Successful", token: token});
-                        }   
-                    })
-                })
-            })
+            let file = req.files;
+            console.log(req.body);
+            if(file){
+               let myImage = req.files.myImage;
+               console.log("My Image", myImage);
+               myImage.mv((__dirname +`/../public/images/${myImage.name}`),(err)=>{
+                   console.log("inside mv");
+                   if(!err){
+                       console.log("Image is transferred");
+                       bcrypt.genSalt(10, (err,salt)=>{
+                        bcrypt.hash(req.body.password, salt, (err,hash)=>{
+                            if(err) console.log(err);
+                            console.log('Created Password Successfully');
+                            let newUser = new User({
+                                username: req.body.username,
+                                email:    req.body.email,
+                                image: '',
+                                password: hash
+                            })
+        
+                            newUser.save((err, registeredUser) =>{
+                                if(err) console.log(err);
+                                else{
+                                    console.log('Created Password Successfully');
+                                    // webToken last for 30 seconds
+                                    let token = jwt.sign({subject: registeredUser._id,iat: Math.floor(Date.now() / 1000) + 30}, 'secret',);
+                                    return res.status(200).json({msg: "Successful", token: token});
+                                }   
+                            })
+                         })
+                        })  
+                   }else{
+                       console.log(err);
+                        res.status(500).json({err: "No Picture was defined"});
+                   }
+               })
+            }
         }
     })
     .catch ((err) =>{
@@ -56,7 +76,7 @@ router.post("/Register", (req,res)=>{
 //Updates Photos
 router.post('/uploadImage', (req,res)=>{
     let file = req.files;
-    console.log(file);
+    console.log(req.body);
     if(file){
        let myImage = req.files.myImage;
        console.log("My Image", myImage);
